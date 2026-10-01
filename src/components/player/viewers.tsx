@@ -8,6 +8,7 @@ import { Markdown } from '@/components/ui/Markdown';
 import { Badge, Skeleton, Spinner } from '@/components/ui/misc';
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/form';
+import { SplitFlapDisplay } from '@/components/cp/split-flap-display';
 
 export interface PlayerHandle { getTime: () => number; seek: (t: number) => void }
 
@@ -256,8 +257,9 @@ export function LiveViewer({ lesson }: { lesson: LessonFull }) {
           </div>
         </div>
         {state === 'upcoming' && (
-          <div className="grid grid-cols-4 gap-2 text-center" aria-label="Countdown">
-            {[['Days', d], ['Hrs', h], ['Min', m], ['Sec', s]].map(([l, v]) => <div key={l as string} className="w-16 rounded-2xl border border-line-2 bg-card-2 py-3"><div className="font-display text-2xl font-bold tabular-nums">{String(v).padStart(2, '0')}</div><div className="text-[10px] uppercase tracking-wider text-subtle">{l}</div></div>)}
+          <div className="flex flex-col items-center gap-2" aria-label={`Starts in ${d} days ${h} hours ${m} minutes`}>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.25em] text-subtle">Departure board</div>
+            <SplitFlapDisplay text={d > 0 ? `T-${String(d).padStart(2, '0')}D ${String(h).padStart(2, '0')}H ${String(m).padStart(2, '0')}M` : `T-${String(h).padStart(2, '0')}H ${String(m).padStart(2, '0')}M ${String(s).padStart(2, '0')}S`} columns={13} size="sm" accentColor="#38d9f5" showIndicators={false} />
           </div>
         )}
       </div>

@@ -296,3 +296,18 @@ export async function seedIfEmpty(force = false) {
   });
   console.log(`✅ Seeded. Sign in with  admin@orbit.space / ${DEMO_PASSWORD}  ·  nova@orbit.space  ·  astro@orbit.space`);
 }
+
+/** Production first-run: no demo data, just one administrator and starter categories. */
+export function bootstrapEmpty() {
+  if (Number(q.get('SELECT COUNT(*) n FROM users')!.n) > 0) return;
+  const email = (process.env.ADMIN_EMAIL || 'admin@example.com').toLowerCase();
+  let password = process.env.ADMIN_PASSWORD || '';
+  let generated = false;
+  if (password.length < 8) { password = crypto.randomBytes(9).toString('base64url'); generated = true; }
+  tx(() => {
+    setSetting('platform', {});
+    q.run('INSERT INTO users(email, name, password_hash, role, avatar_color, title) VALUES (?,?,?,?,?,?)', email, 'Administrator', hashPassword(password), 'admin', 'violet', 'Platform administrator');
+    for (const [name, slug, color] of [['General', 'general', 'violet'], ['Compliance', 'compliance', 'emerald'], ['Skills', 'skills', 'cyan']]) q.run('INSERT INTO categories(name, slug, color) VALUES (?,?,?)', name, slug, color);
+  });
+  console.log(`\n  🛰️  Created administrator ${email}${generated ? `  (generated password: ${password} — change it after signing in)` : ''}\n`);
+}

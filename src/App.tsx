@@ -16,13 +16,19 @@ import CalendarPage from '@/pages/Calendar';
 import Achievements from '@/pages/Achievements';
 import { CertificatesPage, CertificateView, VerifyPage } from '@/pages/Certificates';
 import Profile from '@/pages/Profile';
-import Player from '@/pages/Player';
-import AdminDashboard from '@/pages/admin/AdminDashboard';
-import AdminCourses from '@/pages/admin/AdminCourses';
-import CourseBuilder from '@/pages/admin/CourseBuilder';
-import AdminUsers from '@/pages/admin/AdminUsers';
-import { AdminGroups, AdminEnrollments } from '@/pages/admin/AdminPeople';
-import { AdminLibrary, AdminGrading, AdminReports, AdminAnnouncements, AdminPaths, AdminSettings } from '@/pages/admin/AdminMisc';
+const Player = lazy(() => import('@/pages/Player'));
+const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
+const AdminCourses = lazy(() => import('@/pages/admin/AdminCourses'));
+const CourseBuilder = lazy(() => import('@/pages/admin/CourseBuilder'));
+const AdminUsers = lazy(() => import('@/pages/admin/AdminUsers'));
+const AdminGroups = lazy(() => import('@/pages/admin/AdminPeople').then((m) => ({ default: m.AdminGroups })));
+const AdminEnrollments = lazy(() => import('@/pages/admin/AdminPeople').then((m) => ({ default: m.AdminEnrollments })));
+const AdminLibrary = lazy(() => import('@/pages/admin/AdminMisc').then((m) => ({ default: m.AdminLibrary })));
+const AdminGrading = lazy(() => import('@/pages/admin/AdminMisc').then((m) => ({ default: m.AdminGrading })));
+const AdminReports = lazy(() => import('@/pages/admin/AdminMisc').then((m) => ({ default: m.AdminReports })));
+const AdminAnnouncements = lazy(() => import('@/pages/admin/AdminMisc').then((m) => ({ default: m.AdminAnnouncements })));
+const AdminPaths = lazy(() => import('@/pages/admin/AdminMisc').then((m) => ({ default: m.AdminPaths })));
+const AdminSettings = lazy(() => import('@/pages/admin/AdminMisc').then((m) => ({ default: m.AdminSettings })));
 import NotFound from '@/pages/NotFound';
 
 const learnerNav: NavItem[] = [
@@ -124,4 +130,3 @@ export default function App() {
     </>
   );
 }
-void lazy;

@@ -6,6 +6,7 @@ const base = process.env.BASE || 'http://localhost:5173';
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 await ctx.request.post(base + '/api/auth/login', { data: { email: emails[role], password: 'Orbit123!' }, headers: { 'X-Requested-With': 'orbit' } });
+await ctx.addInitScript((t) => { try { localStorage.setItem('orbit-theme', t); } catch {} }, process.env.THEME || 'dark');
 const page = await ctx.newPage();
 const errors = [];
 page.on('console', (m) => { if (m.type() === 'error') errors.push('console: ' + m.text().slice(0, 200)); });

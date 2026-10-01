@@ -70,6 +70,7 @@ await run('validation: empty quiz question prompt is rejected', async () => {
   await page.getByRole('button', { name: 'Add lesson', exact: true }).last().click();
   await page.getByText(/needs a prompt|needs a correct answer|at least/).first().waitFor(T);
   await page.keyboard.press('Escape');
+  await page.getByRole('dialog').waitFor({ state: 'detached', timeout: 5000 });
 });
 await run('edit details & settings tabs save', async () => {
   await page.getByRole('tab', { name: 'Details' }).click();
@@ -122,6 +123,27 @@ await run('learner sees and opens the new course (sequential locks, SCORM + doc 
   await lp.getByRole('link', { name: /SCORM lesson/ }).click();
   await lp.frameLocator('iframe').getByText(/Connected to LMS/).waitFor(T);
   await lctx.close();
+});
+
+await run('drag-reorder lessons persists after reload', async () => {
+  await page.goto(page.url().replace(/\?.*/, ''));
+  await page.getByRole('tab', { name: 'Curriculum' }).click();
+  const names = async () => (await page.locator('[aria-label^="Edit "]').evaluateAll((els) => els.map((e) => e.getAttribute('aria-label').replace('Edit ', ''))));
+  const before = await names();
+  const handle = page.getByLabel('Drag to reorder').first();
+  const target = page.getByLabel('Drag to reorder').nth(2);
+  const hb = await handle.boundingBox(); const tb = await target.boundingBox();
+  await page.mouse.move(hb.x + hb.width / 2, hb.y + hb.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(hb.x + 2, hb.y + 30, { steps: 5 });
+  await page.mouse.move(tb.x + 2, tb.y + 40, { steps: 12 });
+  await page.mouse.up();
+  await page.waitForTimeout(1200);
+  await page.reload();
+  await page.getByText('Welcome page').first().waitFor(T);
+  const after = await names();
+  if (JSON.stringify(before) === JSON.stringify(after)) throw new Error('order did not change: ' + after.join(', '));
+  if (after[0] === before[0]) throw new Error('first lesson did not move');
 });
 console.log(problems.length ? '\nPROBLEMS:\n' + [...new Set(problems)].join('\n') : '\nNo console/network problems.');
 await browser.close();

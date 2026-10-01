@@ -36,8 +36,8 @@ export default function Achievements() {
         </div>
       </section>
       <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard tone="warm" icon={<Flame />} label="Current streak" value={<><AnimatedNumber value={data.streak} /> days</>} />
-        <StatCard tone="pink" icon={<Crown />} label="Longest streak" value={<><AnimatedNumber value={data.longestStreak} /> days</>} />
+        <StatCard tone="warm" icon={<Flame />} label="Current streak" value={<><AnimatedNumber value={data.streak} /> {data.streak === 1 ? 'day' : 'days'}</>} />
+        <StatCard tone="pink" icon={<Crown />} label="Longest streak" value={<><AnimatedNumber value={data.longestStreak} /> {data.longestStreak === 1 ? 'day' : 'days'}</>} />
         <StatCard tone="accent" icon={<Medal />} label="Badges earned" value={<>{earned}<span className="text-lg text-muted">/{data.badges.length}</span></>} />
       </div>
       <section>

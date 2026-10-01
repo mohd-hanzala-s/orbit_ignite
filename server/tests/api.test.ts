@@ -141,7 +141,8 @@ test('SCORM: package served and tracking completes lesson', async () => {
   const html = await c.get(d.content.scorm.launchUrl);
   assert.equal(html.status, 200);
   assert.ok(html.text.includes('Pre-flight'));
-  assert.equal((await c.get('/scorm-content/1/../../etc/passwd')).status, 404);
+  assert.equal((await c.get('/scorm-content/1/..%2f..%2f..%2f..%2fetc%2fpasswd')).status, 404, 'path traversal must be blocked');
+  assert.equal((await new Client().get(d.content.scorm.launchUrl)).status, 401, 'package files require login');
   const s1 = (await c.post(`/api/lessons/${sc.id}/scorm`, { cmi: { 'cmi.core.lesson_status': 'incomplete' } })).json;
   assert.equal(s1.completed, false);
   const s2 = (await c.post(`/api/lessons/${sc.id}/scorm`, { cmi: { 'cmi.core.lesson_status': 'passed', 'cmi.core.score.raw': '100' } })).json;

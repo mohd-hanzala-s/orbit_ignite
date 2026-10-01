@@ -15,7 +15,7 @@ export function CertificateArt({ c, className }: { c: Pick<Certificate, 'learner
   return (
     <div className={`relative aspect-[1.414/1] w-full overflow-hidden rounded-[22px] border border-[#8b6cff]/40 bg-[#070a1c] text-white shadow-2xl ${className ?? ''}`} style={{ containerType: 'inline-size' }}>
       <div className="absolute inset-0 opacity-70"><CourseCover theme={c.theme} seed={c.courseId} rounded={false} className="scale-150 blur-sm" /></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-[#070a1c]/70 via-[#070a1c]/85 to-[#070a1c]/95" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#070a1c]/55 via-[#070a1c]/78 to-[#070a1c]/90" />
       <div className="absolute inset-[2.2cqw] rounded-[14px] border border-white/20" />
       <div className="absolute inset-[3cqw] rounded-[10px] border border-[#a78bff]/30" />
       <div className="relative flex h-full flex-col items-center justify-center px-[9cqw] text-center">

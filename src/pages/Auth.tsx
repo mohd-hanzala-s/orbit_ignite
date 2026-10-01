@@ -13,6 +13,7 @@ import { InfiniteSlider } from '@/components/mp/infinite-slider';
 import { Magnetic } from '@/components/mp/magnetic';
 import { ThemeToggle } from '@/components/layout/Shell';
 import { Tilt } from '@/components/mp/tilt';
+import { MagnetLines } from '@/components/cp/magnet-lines';
 
 const DEMOS = [
   { label: 'Learner', email: 'astro@orbit.space', icon: Rocket, desc: 'Alex Rivera' },
@@ -56,6 +57,7 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
     <div className="grid min-h-screen lg:grid-cols-[1.1fr_1fr]">
       {/* hero */}
       <div className="relative hidden flex-col justify-between overflow-hidden p-12 lg:flex">
+        <div className="pointer-events-auto absolute -bottom-10 -left-16 hidden opacity-[0.22] xl:block" aria-hidden><MagnetLines rows={8} columns={10} containerSize="560px" lineColor="#a78bff" lineWidth="2px" lineHeight="26px" baseAngle={-12} /></div>
         <Logo />
         <div className="relative z-10 max-w-[500px]">
           <TextEffect as="h1" per="word" preset="fade-in-blur" speedReveal={1.4} className="font-display text-[56px] font-bold leading-[1.02] tracking-tight">

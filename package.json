@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Orbit Ignite — a space-themed, full-featured learning management system.",
+  "description": "Orbit Ignite \u2014 a space-themed, full-featured learning management system.",
   "engines": {
     "node": ">=22.13"
   },
@@ -11,11 +11,13 @@
     "dev": "concurrently -k -n api,web -c magenta,cyan \"npm:dev:server\" \"npm:dev:web\"",
     "dev:server": "tsx watch --env-file-if-exists=.env server/index.ts",
     "dev:web": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -p tsconfig.app.json --noEmit && vite build",
     "start": "tsx --env-file-if-exists=.env server/index.ts",
     "seed": "tsx server/seed-cli.ts",
-    "typecheck": "tsc -b --noEmit",
-    "test": "tsx --test server/tests/*.test.ts"
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.server.json --noEmit",
+    "test": "tsx --test server/tests/*.test.ts",
+    "e2e": "e2e/run.sh e2e/learner.mjs && e2e/run.sh e2e/admin.mjs",
+    "preview": "npm run build && npm start"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
@@ -66,5 +68,6 @@
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.2"
-  }
+  },
+  "license": "MIT"
 }

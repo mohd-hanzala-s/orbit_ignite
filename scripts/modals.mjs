@@ -1,0 +1,16 @@
+import { chromium } from 'playwright-core';
+const base='http://localhost:5173';
+const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } });
+await ctx.request.post(base+'/api/auth/login',{data:{email:'admin@orbit.space',password:'Orbit123!'},headers:{'X-Requested-With':'orbit'}});
+const page = await ctx.newPage();
+await page.goto(base+'/admin/courses/2',{waitUntil:'networkidle'});
+await page.getByRole('button',{name:'Add lesson'}).first().click();
+await page.waitForTimeout(700);
+await page.screenshot({path:'screenshots/m-picker.png'});
+await page.keyboard.press('Escape');
+await page.waitForTimeout(400);
+await page.getByLabel(/^Edit Safety certification exam/).click();
+await page.waitForTimeout(900);
+await page.screenshot({path:'screenshots/m-quiz.png'});
+await b.close();
