@@ -105,10 +105,18 @@ filesRouter.get(
   }),
 );
 
+/** Files uploaded by learners (assignment work) are private to the uploader and staff. */
+function assertCanRead(req: any, f: any) {
+  if (req.user.role !== 'learner' || f.uploaded_by === req.user.id) return;
+  const owner = q.get('SELECT role FROM users WHERE id=?', f.uploaded_by);
+  if (owner && owner.role === 'learner') throw notFound('File not found');
+}
+
 function sendStored(req: any, res: any, inline: boolean) {
   const id = intParam(req, 'id');
   const f = q.get('SELECT * FROM files WHERE id=?', id);
   if (!f) throw notFound('File not found');
+  assertCanRead(req, f);
   const full = path.join(UPLOAD_DIR, f.stored_name);
   if (!fs.existsSync(full)) throw notFound('File data is missing');
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -130,6 +138,7 @@ filesRouter.get(
     const id = intParam(req, 'id');
     const f = q.get('SELECT * FROM files WHERE id=?', id);
     if (!f) throw notFound('File not found');
+    assertCanRead(req, f);
     const full = path.join(UPLOAD_DIR, f.stored_name);
     if (!fs.existsSync(full)) throw notFound('File data is missing');
     const e = ext(f.original_name);

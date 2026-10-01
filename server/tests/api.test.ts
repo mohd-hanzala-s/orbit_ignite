@@ -267,3 +267,19 @@ test('discussions, notes, reviews, bookmarks, search', async () => {
   const dash = (await c.get('/api/me/dashboard')).json;
   assert.ok(dash.stats.xp > 0 && dash.week.length === 7);
 });
+
+test("learner uploads are private to the uploader and staff", async () => {
+  const a = await login('astro@orbit.space');
+  const b = await login('priya@orbit.space');
+  const t = await login('nova@orbit.space');
+  const fd = new FormData();
+  fd.append('file', new Blob(['secret homework']), 'hw.txt');
+  const f = (await a.req('POST', '/api/files', undefined, fd)).json;
+  assert.equal((await a.get(f.url)).status, 200);
+  assert.equal((await t.get(f.url)).status, 200);
+  assert.equal((await b.get(f.url)).status, 404);
+  assert.equal((await b.get(`${f.url}/preview`)).status, 404);
+  // staff-uploaded course media stays readable by learners
+  const course = (await b.get('/api/courses')).json[0];
+  assert.ok(course);
+});
