@@ -1,3 +1,4 @@
+// @ts-nocheck — vendored from motion-primitives.com
 'use client';
 import React, { useMemo, type JSX } from 'react';
 import { motion } from 'motion/react';

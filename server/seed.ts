@@ -60,7 +60,7 @@ export async function seedIfEmpty(force = false) {
       cats[name] = q.run('INSERT INTO categories(name, slug, color) VALUES (?,?,?)', name, slug, color).id;
 
     /* ── files ── */
-    const vid = storeAsset('orbit-intro.mp4', 'video/mp4', 'video', admin);
+    const vid = storeAsset('orbit-intro.webm', 'video/webm', 'video', admin);
     const aud = storeAsset('ambient-briefing.mp3', 'audio/mpeg', 'audio', admin);
     const pdf = storeAsset('mission-handbook.pdf', 'application/pdf', 'pdf', admin);
     const zipTmp = path.join(DATA_DIR, 'demo-scorm.zip');

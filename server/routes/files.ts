@@ -115,7 +115,7 @@ function sendStored(req: any, res: any, inline: boolean) {
   res.setHeader('Content-Type', f.mime);
   res.setHeader('Content-Disposition', `${inline ? 'inline' : 'attachment'}; filename*=UTF-8''${encodeURIComponent(f.original_name)}`);
   // never let uploaded documents execute scripts in our origin
-  if (f.kind !== 'video' && f.kind !== 'audio' && f.kind !== 'image') res.setHeader('Content-Security-Policy', "sandbox; default-src 'none'; style-src 'unsafe-inline'; img-src data:");
+  if (!['video', 'audio', 'image', 'pdf'].includes(f.kind)) res.setHeader('Content-Security-Policy', "sandbox; default-src 'none'; style-src 'unsafe-inline'; img-src data:");
   res.sendFile(full, { dotfiles: 'allow', acceptRanges: true, headers: { 'Content-Type': f.mime } });
 }
 

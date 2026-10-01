@@ -1,3 +1,4 @@
+// @ts-nocheck — vendored from motion-primitives.com
 'use client';
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { motion, useSpring, useTransform, SpringOptions } from 'motion/react';

@@ -12,6 +12,7 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    watch: { ignored: ['**/data/**'] },
     proxy: {
       '/api': `http://localhost:${apiPort}`,
       '/scorm-content': `http://localhost:${apiPort}`,

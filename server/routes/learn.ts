@@ -194,13 +194,14 @@ learnRouter.post(
     const g = gradeQuiz(qz, answers);
     let attemptId: number | null = null;
     let newBadges: string[] = [];
+    let completion: ReturnType<typeof markLessonComplete> | null = null;
     if (tracked) {
       attemptId = q.run('INSERT INTO quiz_attempts(user_id, lesson_id, answers, results, score, max_score, percent, passed, duration_sec) VALUES (?,?,?,?,?,?,?,?,?)', req.user!.id, lesson.id, JSON.stringify(answers), JSON.stringify(g.results), g.score, g.max, g.percent, g.passed ? 1 : 0, clamp(Math.round(Number(req.body?.durationSec) || 0), 0, 86400)).id;
       if (g.passed) {
         awardXp(req.user!.id, XP.quizPass, 'quiz', lesson.id);
         if (g.percent === 100) awardXp(req.user!.id, XP.quizPerfect, 'quiz-perfect', lesson.id);
-        const done = markLessonComplete(req.user!.id, lesson, { score: g.percent });
-        newBadges = done.badges;
+        completion = markLessonComplete(req.user!.id, lesson, { score: g.percent });
+        newBadges = completion.badges;
       } else {
         q.run(`INSERT INTO lesson_progress(user_id, lesson_id, course_id, status, score) VALUES (?,?,?, 'in_progress', ?)
                ON CONFLICT(user_id, lesson_id) DO UPDATE SET score=MAX(COALESCE(lesson_progress.score,0), excluded.score), updated_at=datetime('now')`, req.user!.id, lesson.id, lesson.course_id, g.percent);
@@ -218,6 +219,8 @@ learnRouter.post(
       passScore: qz.passScore ?? 70,
       results: show ? g.results : g.results.map((r) => ({ id: r.id, correct: r.correct, earned: r.earned, points: r.points })),
       badges: [...new Set(newBadges)],
+      firstTime: completion?.firstTime ?? false,
+      enrollment: completion?.enrollment ?? null,
     });
   }),
 );

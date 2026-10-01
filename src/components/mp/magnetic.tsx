@@ -1,3 +1,4 @@
+// @ts-nocheck — vendored from motion-primitives.com
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';

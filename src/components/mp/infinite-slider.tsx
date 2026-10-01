@@ -1,3 +1,4 @@
+// @ts-nocheck — vendored from motion-primitives.com
 'use client';
 import { cn } from '@/lib/utils';
 import { useMotionValue, animate, motion } from 'motion/react';

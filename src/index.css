@@ -1,0 +1,171 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/space-grotesk';
+@import '@fontsource-variable/jetbrains-mono';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk Variable', 'Inter Variable', ui-sans-serif, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-card: var(--card);
+  --color-card-2: var(--card-2);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-primary: var(--primary);
+  --color-primary-2: var(--primary-2);
+  --color-accent: var(--accent);
+  --color-warm: var(--warm);
+  --color-pink: var(--pink);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem;
+  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--primary) 40%, transparent), 0 8px 40px -8px color-mix(in oklab, var(--primary) 55%, transparent);
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-twinkle: twinkle 4s ease-in-out infinite;
+  --animate-pulse-ring: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-spin-slow: spin 40s linear infinite;
+  @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-10px) } }
+  @keyframes twinkle { 0%,100% { opacity: .25 } 50% { opacity: 1 } }
+  @keyframes pulse-ring { 0% { transform: scale(.9); opacity: .7 } 100% { transform: scale(1.6); opacity: 0 } }
+}
+
+/* ───────── Light ("Lunar") theme is the base; dark ("Deep Space") overrides ───────── */
+:root {
+  --bg: #f4f5fc;
+  --bg-2: #eceefa;
+  --card: #ffffff;
+  --card-2: #f7f8fe;
+  --line: rgb(24 28 80 / 0.09);
+  --line-2: rgb(24 28 80 / 0.16);
+  --fg: #13153a;
+  --muted: #5b5e8c;
+  --subtle: #8b8eb4;
+  --primary: #6a4df0;
+  --primary-2: #8b6cff;
+  --accent: #0aa5c7;
+  --warm: #e58a00;
+  --pink: #e0457f;
+  --success: #12a26b;
+  --danger: #e5484d;
+  color-scheme: light;
+}
+.dark {
+  --bg: #060818;
+  --bg-2: #0a0d26;
+  --card: rgb(255 255 255 / 0.045);
+  --card-2: rgb(255 255 255 / 0.07);
+  --line: rgb(255 255 255 / 0.09);
+  --line-2: rgb(255 255 255 / 0.17);
+  --fg: #eceaff;
+  --muted: #a3a1cf;
+  --subtle: #716fa3;
+  --primary: #8b6cff;
+  --primary-2: #a78bff;
+  --accent: #38d9f5;
+  --warm: #ffb547;
+  --pink: #ff6aa8;
+  --success: #3ddc97;
+  --danger: #ff6b6b;
+  color-scheme: dark;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection { background: color-mix(in oklab, var(--primary) 40%, transparent); }
+* { scrollbar-width: thin; scrollbar-color: color-mix(in oklab, var(--fg) 20%, transparent) transparent; }
+h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: -0.02em; }
+
+/* ───────── space atmosphere ───────── */
+.space-bg {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(900px 520px at 85% -8%, color-mix(in oklab, var(--primary) 26%, transparent), transparent 70%),
+    radial-gradient(700px 480px at -5% 25%, color-mix(in oklab, var(--accent) 14%, transparent), transparent 70%),
+    radial-gradient(800px 520px at 55% 115%, color-mix(in oklab, var(--pink) 14%, transparent), transparent 70%),
+    var(--bg);
+}
+.light .space-bg, :root:not(.dark) .space-bg {
+  background:
+    radial-gradient(900px 520px at 85% -8%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 70%),
+    radial-gradient(700px 480px at -5% 25%, color-mix(in oklab, var(--accent) 9%, transparent), transparent 70%),
+    var(--bg);
+}
+:root:not(.dark) .starfield { opacity: 0; }
+
+/* ───────── surfaces ───────── */
+.surface {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-2xl);
+}
+:root:not(.dark) .surface { box-shadow: 0 1px 2px rgb(24 28 80 / 0.04), 0 8px 24px -12px rgb(24 28 80 / 0.1); }
+.dark .surface { backdrop-filter: blur(14px) saturate(1.2); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04); }
+.surface-hover { transition: border-color .2s, transform .25s, box-shadow .25s, background .2s; }
+.surface-hover:hover { border-color: var(--line-2); transform: translateY(-2px); }
+:root:not(.dark) .surface-hover:hover { box-shadow: 0 2px 4px rgb(24 28 80 / .05), 0 18px 36px -14px rgb(24 28 80 / .2); }
+.dark .surface-hover:hover { background: var(--card-2); }
+
+.text-gradient {
+  background: linear-gradient(100deg, var(--primary-2), var(--accent) 55%, var(--pink));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.ring-focus { outline: none; }
+.focus-ring:focus-visible, button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--primary) 70%, transparent); outline-offset: 2px;
+}
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offset: 0; }
+
+/* prose tuned for lesson pages */
+.lesson-prose { color: var(--fg); font-size: 1.0125rem; line-height: 1.75; }
+.lesson-prose h1, .lesson-prose h2, .lesson-prose h3 { color: var(--fg); font-family: var(--font-display); margin-top: 1.8em; margin-bottom: .6em; line-height: 1.2; }
+.lesson-prose h1 { font-size: 2rem; margin-top: 0; }
+.lesson-prose h2 { font-size: 1.5rem; }
+.lesson-prose h3 { font-size: 1.2rem; }
+.lesson-prose p, .lesson-prose li { color: color-mix(in oklab, var(--fg) 88%, transparent); }
+.lesson-prose p { margin: 1em 0; }
+.lesson-prose a { color: var(--primary-2); text-decoration: underline; text-underline-offset: 3px; }
+.lesson-prose ul { list-style: disc; padding-left: 1.4em; } .lesson-prose ol { list-style: decimal; padding-left: 1.4em; }
+.lesson-prose li { margin: .35em 0; }
+.lesson-prose blockquote { border-left: 3px solid var(--primary); background: color-mix(in oklab, var(--primary) 9%, transparent); padding: .8em 1.1em; border-radius: 0 12px 12px 0; margin: 1.4em 0; }
+.lesson-prose blockquote p { margin: 0; }
+.lesson-prose code { font-family: var(--font-mono); font-size: .88em; background: color-mix(in oklab, var(--fg) 9%, transparent); padding: .15em .4em; border-radius: 6px; }
+.lesson-prose pre { background: #0b0e24; color: #dcdcff; border: 1px solid var(--line); padding: 1em 1.2em; border-radius: 14px; overflow-x: auto; margin: 1.4em 0; }
+.lesson-prose pre code { background: none; padding: 0; color: inherit; font-size: .85em; }
+.lesson-prose table { width: 100%; border-collapse: collapse; margin: 1.4em 0; font-size: .93em; }
+.lesson-prose th, .lesson-prose td { border: 1px solid var(--line-2); padding: .6em .9em; text-align: left; }
+.lesson-prose th { background: color-mix(in oklab, var(--primary) 10%, transparent); font-weight: 600; }
+.lesson-prose img { border-radius: 14px; max-width: 100%; }
+.lesson-prose hr { border: 0; border-top: 1px solid var(--line-2); margin: 2em 0; }
+.lesson-prose input[type='checkbox'] { margin-right: .5em; accent-color: var(--primary); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* print: certificates */
+@media print {
+  @page { size: A4 landscape; margin: 0; }
+  body { background: #fff !important; }
+  .no-print { display: none !important; }
+  .print-only-cert { position: fixed; inset: 0; margin: 0 !important; width: 100vw; height: 100vh; border-radius: 0 !important; }
+}

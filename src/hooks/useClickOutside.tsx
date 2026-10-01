@@ -1,3 +1,4 @@
+// @ts-nocheck — vendored from motion-primitives.com
 import { RefObject, useEffect } from 'react';
 
 function useClickOutside<T extends HTMLElement>(

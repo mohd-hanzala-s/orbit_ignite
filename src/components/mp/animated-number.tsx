@@ -1,3 +1,4 @@
+// @ts-nocheck — vendored from motion-primitives.com
 'use client';
 import { cn } from '@/lib/utils';
 import { motion, SpringOptions, useSpring, useTransform } from 'motion/react';
